@@ -3,6 +3,7 @@
 
 <html>
 	<head>
+	<?php $this->load->view('header');?>
 		<style>
 			input {
 				display: block;
@@ -26,30 +27,83 @@
 		</script>
 	</head> 
 <body>  
-	<h1>New Account</h1>
-<?php 
-	echo form_open('account/createNew');
-	echo form_label('Username'); 
-	echo form_error('username');
-	echo form_input('username',set_value('username'),"required");
-	echo form_label('Password'); 
-	echo form_error('password');
-	echo form_password('password','',"id='pass1' required");
-	echo form_label('Password Confirmation'); 
-	echo form_error('passconf');
-	echo form_password('passconf','',"id='pass2' required oninput='checkPassword();'");
-	echo form_label('First');
-	echo form_error('first');
-	echo form_input('first',set_value('first'),"required");
-	echo form_label('Last');
-	echo form_error('last');
-	echo form_input('last',set_value('last'),"required");
-	echo form_label('Email');
-	echo form_error('email');
-	echo form_input('email',set_value('email'),"required");
-	echo form_submit('submit', 'Register');
-	echo form_close();
-?>	
+	<div class="container">
+		
+		<div class="row">
+			 <div class="col-xs-6 col-sm-4"></div>
+			 <div class="col-xs-6 col-sm-4">
+			 <h1>Create New Account</h1>
+				 <?php 
+					$attributesForm = array('role'	=> 'form');
+					$attributesLabel = array();
+					
+					$attributesUsername = array('class' 		=> 'form-control',
+												'required'		=> '',
+												'name' 			=> "username",
+												'value'			=> 'Username');
+					
+					$attributesPassword = array('class' 		=> 'form-control',
+												'required'		=> '',
+												'name' 			=> "password",
+												'value'			=> 'pass',
+												'id'			=> 'pass1');											
+					$attributesPassConf = array('class' 		=> 'form-control',
+												'required'		=> '',
+												'name' 			=> "passconf",
+												'value'			=> 'pass',
+												'id'			=> 'pass2',
+												'oninput'		=> 'checkPassword();');
+					
+					$attributesFirst = array('class' 		=> 'form-control',
+											'required'		=> '',
+											'name' 			=> "first",
+											'value'			=> 'First');											
+					$attributesLast = array('class' 		=> 'form-control',
+											'required'		=> '',
+											'name' 			=> "last",
+											'value'			=> 'Last');							
+			
+					$attributesEmail = array('class' 		=> 'form-control',
+											'required'		=> '',
+											'name' 			=> "email",
+											'value'			=> 'Email');
+					
+					$attributesSubmit = array('class'		=> 'btn btn-default',
+        								  	  'name'		=> 'submit',
+        								  	  'value'		=> 'Register',);								
+											
+					echo form_open('account/createNew');
+					echo form_label('Username', 'username', $attributesLabel); 
+					echo form_error('username');
+					echo form_input($attributesUsername);
+					
+					echo form_label('Password', 'password', $attributesLabel); 
+					echo form_error('password');
+					echo form_password($attributesPassword);
+					
+					echo form_label('Password Confirmation', 'passconf', $attributesLabel); 
+					echo form_error('passconf');
+					echo form_password($attributesPassConf);
+					
+					echo form_label('First', 'first', $attributesLabel);
+					echo form_error('first');
+					echo form_input($attributesFirst);
+					
+					echo form_label('Last', 'last', $attributesLabel);
+					echo form_error('last');
+					echo form_input($attributesLast);
+					
+					echo form_label('Email', 'email', $attributesLabel);
+					echo form_error('email');
+					echo form_input($attributesEmail);
+					
+					echo form_submit($attributesSubmit);
+					echo form_close();
+				?>	
+			 </div>
+			 <div class="col-xs-6 col-sm-4"></div>
+		</div>
+	</div>
 </body>
 
 </html>
