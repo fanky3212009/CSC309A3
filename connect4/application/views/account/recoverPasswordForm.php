@@ -14,7 +14,7 @@
 			  text-align: center;
 			}
 		</style>
-		<script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+		
 	</head> 
 <body>  
 	<div class="container">
