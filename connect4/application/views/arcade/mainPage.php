@@ -7,6 +7,7 @@
 		<?php $this->load->view('header');?>
 
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
 	<script src="<?= base_url() ?>/js/jquery.timers.js"></script>
 	<script>
 		$(function(){

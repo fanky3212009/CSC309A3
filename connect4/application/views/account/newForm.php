@@ -35,42 +35,50 @@
 			 <h1>Create New Account</h1>
 				 <?php 
 					$attributesForm = array('role'	=> 'form');
-					$attributesLabel = array();
+					$attributesLabel = array('style'	=> 'margin:10px 0px 0px 0px;');
 					
 					$attributesUsername = array('class' 		=> 'form-control',
 												'required'		=> '',
 												'name' 			=> "username",
-												'value'			=> 'Username');
+												'placeholder'	=> 'Username');
 					
 					$attributesPassword = array('class' 		=> 'form-control',
 												'required'		=> '',
 												'name' 			=> "password",
-												'value'			=> 'pass',
-												'id'			=> 'pass1');											
+												'value'			=> '',
+												'id'			=> 'pass1',
+												'placeholder'	=> 'Password');		
+																					
 					$attributesPassConf = array('class' 		=> 'form-control',
 												'required'		=> '',
 												'name' 			=> "passconf",
-												'value'			=> 'pass',
+												'placeholder'	=> 'Confirm Password',
 												'id'			=> 'pass2',
 												'oninput'		=> 'checkPassword();');
 					
 					$attributesFirst = array('class' 		=> 'form-control',
 											'required'		=> '',
 											'name' 			=> "first",
-											'value'			=> 'First');											
+											'value'			=> 'First',
+											'placeholder'	=> 'First');	
+											
+																					
 					$attributesLast = array('class' 		=> 'form-control',
 											'required'		=> '',
 											'name' 			=> "last",
-											'value'			=> 'Last');							
+											'value'			=> 'Last',
+											'placeholder'	=> 'Last');							
 			
 					$attributesEmail = array('class' 		=> 'form-control',
 											'required'		=> '',
 											'name' 			=> "email",
-											'value'			=> 'Email');
+											'value'			=> 'Email',
+											'placeholder'	=> 'Email');
 					
 					$attributesSubmit = array('class'		=> 'btn btn-default',
         								  	  'name'		=> 'submit',
-        								  	  'value'		=> 'Register',);								
+        								  	  'value'		=> 'Register',
+        								  	  'style'		=> 'margin:10px 0px 0px 0px;');								
 											
 					echo form_open('account/createNew');
 					echo form_label('Username', 'username', $attributesLabel); 
