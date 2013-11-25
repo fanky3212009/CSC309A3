@@ -1,5 +1,5 @@
 
-<table>
+<table class="table table-hover">
 <?php 
 	if ($users) {
 		foreach ($users as $user) {
@@ -7,7 +7,7 @@
 ?>		
 			<tr>
 			<td> 
-			<?= anchor("arcade/invite?login=" . $user->login,$user->fullName()) ?> 
+			<h4><?= anchor("arcade/invite?login=" . $user->login,$user->fullName()) ?></h4> 
 			</td>
 			</tr>
 
