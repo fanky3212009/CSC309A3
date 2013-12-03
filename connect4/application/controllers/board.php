@@ -139,5 +139,48 @@ class Board extends CI_Controller {
 		echo json_encode(array('status'=>'failure','message'=>$errormsg));
  	}
  	
+ 	function postState() {
+	 	$boardState = $_POST['board'];
+	 	
+	 	$this->load->model('match_model');
+	 	$this->load->model('user_model');
+	 	
+	 	$user = $_SESSION['user'];
+ 		$user = $this->user_model->get($user->login);
+	 	
+	 	$this->match_model->updateBoardState($user->match_id, $boardState);
+ 	}
+ 	
+ 	function getState() {
+	 	$this->load->model('user_model');
+ 		$this->load->model('match_model');
+ 			
+ 		$user = $_SESSION['user'];
+ 		$user = $this->user_model->get($user->login);
+ 		
+ 		// start transactional mode  
+ 		$this->db->trans_begin();
+ 		
+ 		$matchState = $this->match_model->get($user->match_id);	
+ 		$boardPos = $matchState->board_state;
+ 		
+ 		if ($this->db->trans_status() === FALSE) {
+ 			$errormsg = "Transaction error";
+ 			goto transactionerror;
+ 		}		
+ 		
+ 		// if all went well commit changes
+ 		$this->db->trans_commit();
+ 		
+ 		echo json_encode(array('status'=>'success','boardstate'=>$boardPos));
+		return;
+		
+		transactionerror:
+		$this->db->trans_rollback();
+		
+		error:
+		echo json_encode(array('status'=>'failure','message'=>$errormsg));
+ 	}
+ 	
  }
 

@@ -17,6 +17,14 @@
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
 	<script src="<?= base_url() ?>/js/jquery.timers.js"></script>
+	
+	
+	<!-- Script for Connect4 -->
+	<script type="text/javascript" src='<?php echo base_url();?>js/arcade/button.js'></script>
+	<script type="text/javascript" src='<?php echo base_url();?>js/arcade/board.js'></script>
+	<script type="text/javascript" src='<?php echo base_url();?>js/arcade/game.js'></script>
+	
+	
 	<script>
 
 		var otherUser = "<?= $otherUser->login ?>";
@@ -47,6 +55,30 @@
 								$('[name=conversation]').val(conversation + "\n" + otherUser + ": " + msg);
 						}
 					});
+					
+					if (winner) {
+						var win = JSON.stringify(state);
+						var winState = "board=" + win;
+						var url = "<?= base_url() ?>board/postState";
+						$.post(url, winState, function (data,textStatus,jqXHR){
+							console.log("SUCCESS");
+							winner = false;
+						});
+
+					} else {
+						console.log("FAIL");
+					}
+					
+					
+					var url = "<?= base_url() ?>board/getState";
+					$.getJSON(url, function (data,text,jqXHR){
+						if (data && data.status=='success') {
+							//console.log(data.boardstate);
+							recodeJSON(data.boardstate);
+						}
+					});
+
+					
 			});
 
 			$('form').submit(function(){
@@ -64,7 +96,7 @@
 	</script>
 	
 	
-	<script type="text/javascript" src='<?php echo base_url();?>js/arcade/gameboard.js'></script>
+	
 	
 	
 	</head> 
@@ -101,8 +133,31 @@
 	<div class="row">
 		<div class="container">
 		<div class="col-xs-6 col-md-4">
+			<div class="playerTurn" id="<?php 
+				$this->load->model('user_model');
+				$this->load->model('match_model');
+				$user2 = $this->user_model->get($user->login);
+				$match = $this->match_model->getExclusive($user2->match_id);
+				if ($match->user1_id == $user->id) {
+					echo 'P1';
+				} else {
+					echo 'P2';
+				}	
+					?>">
+			</div>
+		
 			<div>
-			Hello <?= $user->fullName() ?>  <?= anchor('account/logout','(Logout)') ?>  
+			Hello <?= $user->fullName() ?> You are <?php 
+				$this->load->model('user_model');
+				$this->load->model('match_model');
+				$user2 = $this->user_model->get($user->login);
+				$match = $this->match_model->getExclusive($user2->match_id);
+				if ($match->user1_id == $user->id) {
+					echo 'Player 1';
+				} else {
+					echo 'Player 2';
+				}	
+					?> <?= anchor('account/logout','(Logout)') ?>  
 			</div>
 			
 			<div id='status'> 
@@ -144,8 +199,10 @@
 			?>
 		</div>
 		
-		<div class="col-xs-12 col-md-8">
-			<canvas id="gameBoard" width="200" height="100"></canvas>
+		
+		
+		<div id="connect4Board" class="col-xs-12 col-md-8">
+			<canvas id="gameBoard" width="500" height="300"></canvas>
 		</div>
 		</div>
 	</div>
