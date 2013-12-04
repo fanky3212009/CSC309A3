@@ -151,6 +151,27 @@ class Board extends CI_Controller {
 	 	$this->match_model->updateBoardState($user->match_id, $boardState);
  	}
  	
+ 	function postWinner() {
+	 	$winner = $_POST['win'];
+	 	
+	 	if ($winner == 1) {
+		 	$winney = '1';
+	 	} else {
+		 	$winney = '2';
+	 	}
+	 	
+	 	$this->load->model('match_model');
+	 	$this->load->model('user_model');
+	 	
+	 	$user = $_SESSION['user'];
+ 		$user = $this->user_model->get($user->login);
+	 	
+	 	$this->match_model->updateStatus($user->match_id, $winney);
+ 	}
+ 	
+ 	/*
+ 	Get the board state 
+ 	*/
  	function getState() {
 	 	$this->load->model('user_model');
  		$this->load->model('match_model');

@@ -32,7 +32,7 @@
 		var status = "<?= $status ?>";
 		
 		$(function(){
-			$('body').everyTime(2000,function(){
+			$('body').everyTime(1000,function(){
 					if (status == 'waiting') {
 						$.getJSON('<?= base_url() ?>arcade/checkInvitation',function(data, text, jqZHR){
 								if (data && data.status=='rejected') {
@@ -56,25 +56,33 @@
 						}
 					});
 					
-					if (winner) {
+					if (sendState) {
+						sendState = false;
+						
 						var win = JSON.stringify(state);
 						var winState = "board=" + win;
 						var url = "<?= base_url() ?>board/postState";
 						$.post(url, winState, function (data,textStatus,jqXHR){
-							console.log("SUCCESS");
-							winner = false;
+							console.log("SUCCESS for Send");
+						});
+						
+					}
+					
+					if (winner) {
+						var winState = "win=" + target;
+						var url = "<?= base_url() ?>board/postWinner";
+						$.post(url, winState, function (data,textStatus,jqXHR){
+				
 						});
 
-					} else {
-						console.log("FAIL");
-					}
+					} 
 					
 					
 					var url = "<?= base_url() ?>board/getState";
 					$.getJSON(url, function (data,text,jqXHR){
 						if (data && data.status=='success') {
-							//console.log(data.boardstate);
 							recodeJSON(data.boardstate);
+							board.draw();
 						}
 					});
 

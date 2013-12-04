@@ -9,10 +9,27 @@ var mouseY = 0;
 var target = 1;
 var state;
 var winner = false;
+var sendState = false;
+var declareWin = 0;
+var winnerText = '';
 
 function encodeJSON(boardState) {
 	state = {};
 	var column = {};
+	
+	if (target == 1) {
+		column["currentTurn"] = "2";
+	} else {
+		column["currentTurn"] = "1";
+	}
+
+	state["turn"] = column;
+	column = {};
+	
+	column["winner"] = declareWin;
+	state["win"] = column;
+	column = {};
+	
 	for (var i = 0; i < 7; i++) {
 		for (var j = 0; j < 6; j++) {
 			column[j] = boardState[i][j];
@@ -20,42 +37,48 @@ function encodeJSON(boardState) {
 		state[i] = column;
 		column = {};
 	}
-	console.log(state);
 }
 
 function recodeJSON(boardState) {
 	var boardPosition = JSON.parse(boardState);
 	boards = $.parseJSON(boardState);
-
+	
 	$.each(boards, function(index, value) {
 		$.each(value, function(index2, val2) {
-			board.boardState[index][index2] = val2;
+			if (index2 <= 7) {
+				board.boardState[index][index2] = val2;
+			}  
 		});
+		
+		if (index == 'turn') {
+			if (target != value.currentTurn) {
+				canvas.onmousedown = '';
+			} else {
+				canvas.onmousedown = setClick;
+			}
+		} else if (index == 'win') {
+			if (value.winner != 0) {
+				canvas.onmousedown = '';
+				winnerText = "Player " + value.winner + " is the Winner!";
+			}
+		}
 	});
 }
 
-$(document).ready(function() {
-	canvas = document.getElementById("gameBoard");
-	context = canvas.getContext("2d");
-	
-	board = new Board(canvas);
-	
-	// Initialize mouse move function
-	canvas.onmousemove = function(e) {		
-		context.clearRect(0,0,canvas.width,canvas.height);
-		
-		rect = canvas.getBoundingClientRect();
-		mouseX = e.pageX - rect.left;
-		mouseY = e.pageY - rect.top;
-		board.draw();
-	};
-	
-	canvas.onmousedown = function(e) {
+function setClick(e) {
 		clickX = e.pageX - rect.left;
 		clickY = e.pageY - rect.top;
 		
 		winner = false;
-
+	
+		for (var i = 0; i < 7; i++) {
+			if (board.buttons[i].testHit(clickX, clickY)) {
+				break;
+			}
+			
+			if (i == 6) {return;}
+		}
+		
 		// Draw buttons
 		for (var i = 0; i < 7; i++) {
 			if (board.buttons[i].testHit(clickX, clickY)) {
@@ -98,7 +121,6 @@ $(document).ready(function() {
 				}
 				
 				if (count == 4) {
-					console.log('winner vert');
 					encodeJSON(board.boardState);
 					winner = true;
 				} 
@@ -116,7 +138,6 @@ $(document).ready(function() {
 			}
 			
 			if (count == 4) {
-					console.log('winner DIAG31');
 					winner = true;
 				} 
 			count = 0;
@@ -131,7 +152,6 @@ $(document).ready(function() {
 			}
 			
 			if (count == 4) {
-					console.log('winner diag21');
 					winner = true;
 				} 
 			count = 0;
@@ -146,7 +166,6 @@ $(document).ready(function() {
 			}
 			
 			if (count == 4) {
-					console.log('winner diag11');
 					winner = true;
 				} 
 			count = 0;
@@ -164,7 +183,6 @@ $(document).ready(function() {
 			}
 			
 			if (count == 4) {
-					console.log('winner diag32');
 					winner = true;
 				} 
 			count = 0;
@@ -179,7 +197,6 @@ $(document).ready(function() {
 			}
 			
 			if (count == 4) {
-					console.log('winner diag22');
 					winner = true;
 				} 
 			count = 0;
@@ -194,27 +211,51 @@ $(document).ready(function() {
 			}
 			
 			if (count == 4) {
-					console.log('winner Diag12');
 					winner = true;
 				} 
 			count = 0;
 		}
 		
 		
-		//////////////////////////		
+		//////////////////////////	
 		
-		// switch turns
-		if (target == 1) {
-			target = 2;
-		} else {
-			target = 1;
-		}
-		
-		
+		if (winner) {
+			declareWin = target;
+		}	
+
+		encodeJSON(board.boardState);
+		sendState = true;
+		canvas.onmousedown = '';
 		
 			 context.clearRect(0,0,canvas.width,canvas.height);
 	 			board.draw();
 				
+	}
+
+
+$(document).ready(function() {
+	canvas = document.getElementById("gameBoard");
+	context = canvas.getContext("2d");
+	
+	board = new Board(canvas);
+	
+	if ($(".playerTurn").attr('id') == "P1") {
+		target = 1;
+	} else {
+		target = 2;
+	}
+	
+	// Initialize mouse move function
+	canvas.onmousemove = function(e) {		
+		context.clearRect(0,0,canvas.width,canvas.height);
+		
+		rect = canvas.getBoundingClientRect();
+		mouseX = e.pageX - rect.left;
+		mouseY = e.pageY - rect.top;
+		board.draw();
 	};
+	
+	canvas.onmousedown = setClick;
+	
 });
 

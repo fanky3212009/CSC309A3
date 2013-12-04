@@ -11,9 +11,7 @@ function Board(canvas) {
 		 for (var i = 0; i < 8; i++) {
 this.boardState.push([0,0,0,0,0,0]);
 		 }
-		 
-		 console.log(this.boardState);
-	
+		 	
 		// Load buttons
 		for (var i = 0; i < 7; i++) {
 			this.buttons.push(new Button(context, (i * 40) + 15, canvas.height - 30));
@@ -29,6 +27,11 @@ Board.type = 'Board';
 
 Board.prototype.draw = function() {
 	var columnSpace = 40;
+	
+	context.clearRect(0,0,canvas.width,canvas.height);
+	context.fillText(winnerText, 
+				(canvas.width / 2) - (context.measureText(winnerText).width / 2), 20);
+
 	
 	// Draw Columns
 	for (var i = 0; i < 8; i++) {
