@@ -74,6 +74,11 @@
 											'name' 			=> "email",
 											'value'			=> 'Email',
 											'placeholder'	=> 'Email');
+											
+					$attributesCAPTCHA = array('class'		=> 'form-control',
+											   'name'		=> 'captcha_code',
+											   'size'		=> '10',
+											   'maxlength'	=> '6');
 					
 					$attributesSubmit = array('class'		=> 'btn btn-default',
         								  	  'name'		=> 'submit',
@@ -105,10 +110,17 @@
 					echo form_error('email');
 					echo form_input($attributesEmail);
 					
+					echo form_label('Captcha', 'captcha', $attributesLabel);
+					echo form_error('captcha');
+					echo form_input($attributesCAPTCHA);
+					
+					echo '<img id="captcha" src="' . base_url() . 'libraries/securimage/securimage_show.php" alt="CAPTCHA Image" />';
+									
 					echo form_submit($attributesSubmit);
 					echo form_close();
 				?>	
 			 </div>
+			 <a href="#" onclick="document.getElementById('captcha').src = '<?php echo base_url();?>libraries/securimage/securimage_show.php?' + Math.random(); return false">[ Different Image ]</a>
 			 <div class="col-xs-6 col-sm-4"></div>
 		</div>
 	</div>
